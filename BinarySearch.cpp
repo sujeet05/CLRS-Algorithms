@@ -1,6 +1,6 @@
 #include<iostream>
 #include<math.h>
-
+//making a sample change
 using namespace std;
 
 int BinarySearch(int arr[],int p,int q,int element)
