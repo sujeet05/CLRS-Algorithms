@@ -169,6 +169,47 @@ struct node* Predecessor(int key)
 		}
 		return NULL;
 }
+void Transplant(struct node **btree,struct node *u, struct node *v)
+{
+	struct node *Uparent = NULL;
+	struct node *Vparent = NULL;
+	if(u)
+		 Uparent= getparent(u->data);
+	if(v)
+		 Vparent= getparent(v->data);
+	if(!Uparent)
+		*btree = v;
+	else if (u==Uparent->left)
+		Uparent->left = v;
+	else
+		Uparent->right =v;
+	
+}
+void Delete(struct node **btree,struct node * _deletenode)
+{
+	if(_deletenode)
+	{
+		if(!(_deletenode->left)) //No left child of deleted node handle two case 1. no left child 2. leaf node 
+			Transplant(btree,_deletenode,_deletenode->right);
+		else if(!(_deletenode->right))
+			Transplant(btree,_deletenode,_deletenode->left);
+		else
+		{
+			struct node *successornode = Successor(_deletenode->data);
+			if(successornode)
+			{
+				if(_deletenode->right != successornode)
+				{
+					 Transplant(btree,successornode,successornode->right);
+					 successornode->right = _deletenode->right;
+					 _deletenode->right = successornode;
+				}
+		        Transplant(btree,_deletenode,successornode);
+				successornode->left = _deletenode->left;
+			}
+		}
+	}
+}
 int main()
 {
 	insert2(&root,15);
@@ -224,5 +265,17 @@ int main()
 	cout << "predecessor of node 13 :" << Predecessor(13)->data << endl;
 	cout << "predecessor of node 17 :" << Predecessor(17)->data << endl;
 	cout << "predecessor of node 15 :" << Predecessor(15)->data << endl;
+	Delete(&root,findelement(13));
+	cout << "After delete 13 inorder traversal " << endl;
+	inorder(root);
+	Delete(&root,findelement(6));
+	cout << "After delete 6 inorder traversal " << endl;
+	inorder(root);
+	Delete(&root,findelement(9));
+	cout << "After delete 9 inorder traversal " << endl;
+	inorder(root);
+	Delete(&root,findelement(15));
+	cout << "After delete 15 inorder traversal " <<  endl;
+	inorder(root);
 	return 0;
 }
