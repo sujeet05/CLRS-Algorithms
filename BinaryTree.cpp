@@ -209,6 +209,7 @@ void Delete(struct node **btree,struct node * _deletenode)
 			}
 		}
 	}
+	delete _deletenode;
 }
 int main()
 {
