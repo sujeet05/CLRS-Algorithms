@@ -150,6 +150,18 @@ struct node * Successor(int key)
 		}
 			return NULL;
 }
+void inorder_alternate(struct node *btree,int number)
+{
+	struct node *tree_min = TreeMinimum(btree);
+	for(int i=0;i<number;i++)
+	{
+			if(tree_min)
+			{
+				std::cout << tree_min->data << "...";
+				tree_min = Successor(tree_min->data);
+			}
+	}
+}
 struct node* Predecessor(int key)
 {
 		if(!root)
@@ -237,6 +249,8 @@ int main()
 	insert(17);
 	insert(20);
 #endif 
+	cout << "Inorder Traversal Alternate... " << endl;
+	inorder_alternate(root,11);
 	cout << "Inorder Traversal... " << endl;
 	inorder(root);
 	cout << "Prerder Traversal... " << endl;
