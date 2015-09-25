@@ -27,9 +27,9 @@ void swap(int *x,int *y)
 }
 void Max_HeapIFY(int arr[],int i)
 {
-	if(left(i) > size-1) return;
-	else
-	{
+//	if(left(i) > size-1) return;
+//	else
+//	{
 		int left_index = left(i);
 		int right_index = right(i);
 		int largest = find_maxOf_three(arr[i],arr[left_index],arr[right_index]);
@@ -39,23 +39,16 @@ void Max_HeapIFY(int arr[],int i)
 		else
 			largest_index = right_index;
 		if(i != largest_index)
+		{
 			swap(arr[i],arr[largest_index]);
-     	Max_HeapIFY(arr,i+1);
-	}
+     		Max_HeapIFY(arr,i+1);
+		}
+//	}
 }
 int main()
 {
-	std::cout << find_maxOf_three(4,5,2);
-	std::cout << find_maxOf_three(7,5,2);
-	std::cout << find_maxOf_three(4,5,10);
-	std::cout << endl;
-	std::cout << parent(9);
-	std::cout << left(4);
-	std::cout << right(4) << endl;
-	int arr[10] ={16,4,10,14,7,9,3,2,8,1};
-//	swap(&arr[0],&arr[1]);
+	int arr[10] ={16,4,10,14,22,9,3,2,8,1};
 	printArray(arr,10);
-	std::cout << "End test utility..." << endl;
 	Max_HeapIFY(arr,0);
 	printArray(arr,10);
 }
