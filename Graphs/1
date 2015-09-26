@@ -1,0 +1,101 @@
+#include<iostream>
+#include<vector>
+#include<map>
+using namespace std;
+
+class vertix
+{
+ public:
+	char name;
+	char parent;
+	int  weight;
+	vertix(char name ,char parent='T',int weight=99999):name(name),parent(parent),weight(weight) {}
+};
+class DAGGraph
+{
+	public:
+		DAGGraph(vector<vertix*> _v):m_vertices(_v){ AddEdge(); }
+		vector<vertix*> m_vertices;
+		void RunAlgorithm();
+		map<char,map<char,int>> m_edges;
+		void AddEdge();
+		void initializeSingleSource(vertix& v);
+		void Relax();
+		int getweight(char c) {int _ret;for (auto i:m_vertices) if(i->name==c) _ret= i->weight;return _ret;}
+		void setweight(char c,int weight) {for (auto i:m_vertices) if(i->name==c)  i->weight=weight;}
+		void setparent(char c,char p) {for(auto i:m_vertices) if(i->name==c) i->parent=p;}
+};
+ostream& operator << (ostream& os ,const vector<vertix*>& v)
+{
+	for(auto i:v)
+		os << i->name << ".." << i->parent << ".." << i->weight << endl;
+}
+void DAGGraph::AddEdge()
+{
+	m_edges['s']['t'] =6;
+	m_edges['s']['y'] =7;
+	m_edges['t']['x'] =5;
+	m_edges['t']['y'] =8;
+	m_edges['t']['z'] =-4;
+	m_edges['x']['t'] =-2;
+	m_edges['y']['x'] =-3;
+	m_edges['y']['z'] =9;
+	m_edges['z']['s'] =2;
+	m_edges['z']['x'] =7;
+}
+void DAGGraph::initializeSingleSource(vertix& _v)
+{
+	for(auto i:m_vertices)
+	{
+		i->parent = 'T';
+		i->weight = 99999;
+		if(i->name==_v.name)
+			i->weight =0;
+	}
+}
+
+void DAGGraph::Relax()
+{
+	for(auto i:m_edges)
+	{
+		char u =i.first;
+		for(auto j:m_edges[u])
+		{
+			int u_w= getweight(u);
+			int v_w=getweight(j.first);
+			int _weight =u_w+j.second;
+			if(v_w >_weight)
+			{
+				setweight(j.first,_weight);
+				setparent(j.first,u);
+			} 
+		}
+	}
+}
+
+void DAGGraph::RunAlgorithm()
+{
+	initializeSingleSource(*m_vertices[0]);
+		for(auto i:m_vertices)
+		Relax();
+
+}
+int main()
+{
+	vector<vertix*> v;
+	vertix v1('s');
+	v.push_back(&v1);
+	vertix v2('t');
+	v.push_back(&v2);
+	vertix v3('x');
+	v.push_back(&v3);
+	vertix v4('y');
+	v.push_back(&v4);
+	vertix v5('z');
+	v.push_back(&v5);
+	DAGGraph G(v);
+	cout <<G.RunAlgorithm() << endl;
+    cout << G.m_vertices;	
+	cout << endl;
+	return 0;
+}
